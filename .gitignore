@@ -1,0 +1,8 @@
+**/build
+**/__pycache__
+**/__pycache__/*
+**/.vscode
+
+*.pb.*
+*_pb2.*
+*_pb2*

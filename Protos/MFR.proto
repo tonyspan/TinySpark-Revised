@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+// namespace
+package MFR;
+
+// all MapReduce related services
+service MFRService
+{
+    // Map, Reduce service for large files between client & driver
+    rpc MFRFileCD(MFRFileRequest) returns (MFRResponse);
+    // Map, Reduce service for large files between driver & worker
+    rpc MFRFileDW(MFRFileRequest) returns (MFRResponse);
+
+    // Map, Reduce service for lists between client & driver
+    rpc MFRListCD(MFRListRequest) returns (MFRResponse);
+    // Map, Reduce service for lists between driver & worker
+    rpc MFRListDW(MFRListRequest) returns (MFRResponse);
+}
+
+message MFRListRequest
+{
+    // global
+    repeated float NumList = 1;
+    repeated string StrList = 2;
+    int32 ArgType = 3;
+    
+    // map
+    string MapForm = 4;
+    string MapRet = 5;
+    
+    // reduce
+    string ReduceForm = 6;
+    string ReduceRet = 7;
+    float initial = 8;
+    
+    // filter
+    string FilterForm = 9;
+    string FilterRet = 10;
+    string hasFilter = 11;
+}
+
+message MFRFileRequest
+{
+    // global
+    string Filename = 1;
+    
+    // map
+    string Map = 2;
+    
+    // reduce
+    string Reduce = 3;
+
+    // Used by Driver to Worker
+    uint32 ChunkSize = 4;
+    uint32 ChunkOffset = 5;
+}
+
+message MFRResponse
+{
+    float ReduceResult = 1;
+    map<string, uint32> final = 2;
+}
+
+message EmptyRequest {}
+message EmptyResponse {}

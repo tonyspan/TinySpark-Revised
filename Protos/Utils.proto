@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+// namespace
+package Utils;
+
+service UtilsService {
+    rpc registerWorker(RegisterRequest) returns (RegisterResponse);
+    rpc deRegisterWorker(RegisterRequest) returns (EmptyResponse);
+    // rpc pingWorker(PingRequest) returns (PingResponse);
+}
+
+message RegisterRequest {
+    string WorkerHostPort = 1;
+}
+
+message RegisterResponse {
+    uint32 WorkerID = 1;
+}
+
+message PingRequest {
+    string WorkerHostPort = 1;
+}
+
+message PingResponse {
+    string Status = 1;
+}
+
+message EmptyRequest {}
+message EmptyResponse {}

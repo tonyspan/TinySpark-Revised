@@ -119,21 +119,21 @@ class RPCCall():
 		if obj.GetList() is not None:
 
 			if obj.GetType() == MFRType.NUMERIC.value:
-				response = EstablishConnectionToBackend(gAddrPort).GetStub().MFRListCD(MFR_pb2.MFRListRequest(	NumList = obj.GetList(),
-																												MapForm = obj.GetMap()[0], MapRet = obj.GetMap()[1],
-																												FilterForm = obj.GetFilter()[0], FilterRet = obj.GetFilter()[1],
-																												ReduceForm = obj.GetReduce()[0], ReduceRet = obj.GetReduce()[1],
-																												initial = 0,
-																												ArgType = obj.GetType(),
-																												hasFilter = obj.HasFilter() ))
+				response = EstablishConnectionToBackend(gAddrPort).GetStub().MFRListCD(MFR_pb2.MFRListRequest(NumList = obj.GetList(),
+																											MapForm = obj.GetMap()[0], MapRet = obj.GetMap()[1],
+																											FilterForm = obj.GetFilter()[0], FilterRet = obj.GetFilter()[1],
+																											ReduceForm = obj.GetReduce()[0], ReduceRet = obj.GetReduce()[1],
+																											initial = 0,
+																											ArgType = obj.GetType(),
+																											hasFilter = obj.HasFilter()))
 			else:
-				response = EstablishConnectionToBackend(gAddrPort).GetStub().MFRListCD(MFR_pb2.MFRListRequest(	StrList = obj.GetList(),
-																												MapForm = obj.GetMap()[0], MapRet = obj.GetMap()[1],
-																												FilterForm = obj.GetFilter()[0], FilterRet = obj.GetFilter()[1],
-																												ReduceForm = obj.GetReduce()[0], ReduceRet = obj.GetReduce()[1],
-																												initial = 0,
-																												ArgType = obj.GetType(),
-																												hasFilter = obj.HasFilter() ))
+				response = EstablishConnectionToBackend(gAddrPort).GetStub().MFRListCD(MFR_pb2.MFRListRequest(StrList = obj.GetList(),
+																											MapForm = obj.GetMap()[0], MapRet = obj.GetMap()[1],
+																											FilterForm = obj.GetFilter()[0], FilterRet = obj.GetFilter()[1],
+																											ReduceForm = obj.GetReduce()[0], ReduceRet = obj.GetReduce()[1],
+																											initial = 0,
+																											ArgType = obj.GetType(),
+																											hasFilter = obj.HasFilter()))
 			self.__mListReturn = response.__getattribute__('ReduceResult')
 			self.__mFileReturn = None
 		else:

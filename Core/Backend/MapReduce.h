@@ -72,7 +72,7 @@ namespace TinySpark
         }
 
         template <typename InputMapType>
-        std::unordered_map<InputMapType, uint32_t> MFR_ReturnMap()
+        std::unordered_map<InputMapType, uint32_t>& MFR_ReturnMap()
         {
             return std::get<std::unordered_map<InputMapType, uint32_t>>(m_Map);
         }

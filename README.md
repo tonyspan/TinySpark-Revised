@@ -9,8 +9,10 @@ All Apache Spark components, including the Driver, Master, and Executor processe
 The Backend was written in `C++17`, using features like `std::variant, std::filesystem` etc. `boost::tokenizer` for file tokenization, `OpenMP` to speed things up, and tried to be system/platform independent.
 
 # Key Difference
-* Old-er version relied on a dispatch table that matched specific *actions* extracted from clients code to the Backend in order to execute an *already* predefined templated function that corresponds to that *action*. Now, it is more dynamic. There is a new subsystem in Backend, that at **runtime**, when it receives a function from Frontend, through gRPC, e.g for `x => x < 3`, `x` is formal argument and `x<3` is return statement with type of `x` is assumed to be the same as *MFRObject* List (here int). Final `C++` function looks like: ```T filt(T x) { return x<3; }```, similarly for *map, reduce*, and stores it into a shared library (.so or .dll, subsystem supports both Linux and Windows). Another new subsystem (supports both Linux and Windows), loads that shared library and executes *filter, map* and *reduce* on the object.
-	* There are some limitations still (e.g argument types), but it is more versatile now.
+* Old-er version relied on a dispatch table that matched specific *actions* extracted from client's code to the Backend in order to execute an *already* predefined templated function that corresponds to that *action*. Now, it is more dynamic. 
+There are two new subsystems in the Backend, the first one, at **runtime**, when it receives a function from Frontend, through gRPC, e.g `x => x < 3`, where `x` is the formal argument and `x<3` is the return statement with type of `x` is assumed to be the same as *MFRObject* List (here int). Final `C++` function looks like: ```T filt(T x) { return x<3; }```, similarly for *map, reduce*, and stores it into a shared library (.so or .dll, subsystem supports both Linux and Windows).
+The second new subsystem (supports both Linux and Windows), dynamically invokes *filter, map* and *reduce* functions/methods at runtime on the object.
+	* There are some limitations still (e.g number of arguments and type), but it is more versatile now.
 
 # Other Changes
 * A better project structure
@@ -38,23 +40,24 @@ print(ts.RPCCall(my_obj).GetRPCResult())
 * Apache Spark does not evaluate every transformation (e.g map) just as it encounters it but instead waits for an action to be called (e.g collect). In this system, there is no such functionality, as soon as the Backend receives a task, immediately executes it, and sends a response.
 * Although *map, filter* and *reduce* were implemented with `C++17`'s Parallel Algorithms (to gain more performance) in mind, in the end they were used without an execution policy.
 * The Backend throws runtime exceptions if anything go wrong (it should handle cases like those).
+* No proper profiling and optimization(s)
 
 # Benchmarks
 For benchmarking a single machine was used, equipped with an Intel(R) i5 6th Gen, 4 cores and 4 threads, 16GB DDR4 RAM, with Ubuntu 20.4, using GCC 9.3.0, whilst running multiple processes.
 
 `WordCount` Each word of a file with its frequency. Comparison to Spark is **not** apples-to-apples, as Spark processes more things than our implementation (i.e ReduceByKey).
 ```
-TinySpark: 53859 ms
+TinySpark: 46401 ms
 Apache Spark: 128380 ms
 ```
 `LineCount` number of lines of a file.
 ```
-TinySpark: 30942 ms
+TinySpark: 25839 ms
 Apache Spark: 36870 ms
 ```
 `StrToInt` Conversion of string into a long int (*map* operation) and summation of those numbers (*reduce* operation).
 ```
-TinySpark: 29975 ms
+TinySpark: 29876 ms
 Apache Spark: 27763 ms
 ```
 # Other examples
@@ -90,7 +93,7 @@ my_obj.Reduce('_ + _') # or my_obj.Reduce('x, y => x + y')
 print(ts.RPCCall(my_obj).GetRPCResult())
 ```
 
-# Installation
+# Getting Started
 **Dependencies:**
 * gRPC (`C++` and `Python`)
 * OpenMP

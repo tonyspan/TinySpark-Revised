@@ -139,7 +139,7 @@ namespace TinySpark
         // TODO: Refactor
         Args MapRetPyToCpp(const std::string &func)
         {   
-            for(auto& binding : m_PyToCppMap)
+            for(auto& binding : s_PyToCppMap)
             {
                 auto it = m_MapRet.find(binding);
 
@@ -170,7 +170,7 @@ namespace TinySpark
         std::string m_Type;
 
         // add more bindings here and update MapRetPyToCpp()
-        static const std::vector<std::string> m_PyToCppMap;
+        static const std::vector<std::string> s_PyToCppMap;
     };
 
     FunctionFactory& FunctionFactory::GetInstance()
@@ -180,5 +180,5 @@ namespace TinySpark
         return m_Instance;
     }
 
-    const std::vector<std::string> FunctionFactory::m_PyToCppMap{ "**", ".length" };
+    const std::vector<std::string> FunctionFactory::s_PyToCppMap{ "**", ".length" };
 }

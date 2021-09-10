@@ -1,8 +1,8 @@
 #pragma once
 
-#include "pch.h"
+#include "../pch.h"
 
-#include "PlatformDetection.h"
+#include "../PlatformDetection.h"
 
 namespace TinySpark
 {
@@ -48,7 +48,6 @@ namespace TinySpark
 		#ifdef PLATFORM_LINUX
 			return std::function<Ret(Args...)>(reinterpret_cast<Ret(*)(Args...)>(funcID));
 		#endif
-
 		}
 	private:
 		void UnloadFile()
@@ -63,7 +62,7 @@ namespace TinySpark
 			#endif
 				m_Handler = nullptr;
 			}
-	}
+		}
 	private:
 	#ifdef PLATFORM_WINDOWS
 		HINSTANCE m_Handler = nullptr;
